@@ -1520,8 +1520,7 @@
           cafe in GEC, a campus lab at CUET, a living room in Rangpur - and host the community there.
           Guests RSVP, get the address on their ticket, check in with a QR, and rate the host after.
           The best-rated hosts top their division's leaderboard and earn the OpenAI Community
-          Influencer badge. Hosts pay a small listing fee and the OpenAI community fund pays it back
-          as a crowdwork kit: cha, posters, wifi.
+          Influencer badge. Hosts pay a small listing fee that covers the community kit: cha, posters, wifi.
         </p>
         <div class="event-search" role="search">
           <label class="sr-only" for="event-search">Search events or cities</label>
@@ -1621,21 +1620,21 @@
       </section>
 
       <section id="host" class="section">
-        <p class="kicker">Crowdwork, co-funded</p>
+        <p class="kicker">Why hosts stay</p>
         <h2>Host a meet at your <span class="quirk">address</span></h2>
         <p class="section-lead">
-          OPEN BOX is influencer work for OpenAI, only in Bangladesh. You host the room. OpenAI
-          co-pays the crowdwork budget. Attendees rate you. Rank #1 in your division and you are
-          recognised as an OpenAI community influencer.
+          Your host fee helps cover the community kit: cha, posters, and wifi. You host the room,
+          attendees rate you, and the community gets a welcoming place to build together.
         </p>
-        <div class="grid three host-plans">
+        <div class="grid four host-plans">
+          <article class="card plan-card"><p class="eyebrow">Free</p><p class="plan-price">0 BDT <span>host fee</span></p><ul class="plan-features"><li>Public meet page</li><li>RSVP and check-in QR</li><li>Community feed listing</li><li>One free meet per host</li></ul><a class="btn btn-ghost" href="#host-form">Open my box</a></article>
           <article class="card plan-card">
             <p class="eyebrow">Community listing</p>
             <p class="plan-price">800 BDT <span>host fee</span></p>
             <ul class="plan-features">
               <li>Public meet page at your local address</li>
               <li>RSVP, calendar hold, and check-in QR</li>
-              <li>OpenAI co-pay: 1,200 BDT crowdwork kit</li>
+              <li>Cha, posters, and wifi community kit</li>
             </ul>
             <a class="btn btn-ghost" href="#host-form">List my meet</a>
           </article>
@@ -1645,7 +1644,7 @@
             <p class="plan-price">2,500 BDT <span>host fee</span></p>
             <ul class="plan-features">
               <li>Top of the Bangladesh feed</li>
-              <li>OpenAI co-pay: 4,000 BDT (snacks, posters, data)</li>
+              <li>Cha, posters, and wifi community kit</li>
               <li>Email + ranking boost in your division</li>
               <li>QR poster pack for the venue</li>
             </ul>
@@ -1656,7 +1655,7 @@
             <p class="plan-price">1,800 BDT <span>/ month</span></p>
             <ul class="plan-features">
               <li>Unlimited local-address meets</li>
-              <li>OpenAI co-pay on every event</li>
+              <li>Community kit support for every event</li>
               <li>Guest list export and waived ticket fees</li>
               <li>Eligible for OpenAI Influencer badge</li>
             </ul>
@@ -1666,7 +1665,7 @@
 
         <form class="card host-form" id="host-form">
           <h3>List a meet</h3>
-          <p>Host fee is collected here in page memory. OpenAI’s crowdwork co-pay is reserved against the same listing.</p>
+          <p>Publish your meet for the whole community, or make it private and invite-only.</p>
           <div class="form-grid">
             <label>Host name <input name="hostName" required placeholder="Your name" /></label>
             <label>Division
@@ -1688,13 +1687,15 @@
             <label>Capacity <input name="capacity" type="number" min="5" max="200" value="30" required /></label>
             <label>Host fee plan
               <select name="plan">
-                <option value="community">Community — 800 BDT + OpenAI 1,200 BDT</option>
-                <option value="featured">Featured — 2,500 BDT + OpenAI 4,000 BDT</option>
+                <option value="free">Free — 0 BDT</option>
+                <option value="community">Community — 800 BDT</option>
+                <option value="featured">Featured — 2,500 BDT</option>
                 <option value="pro">Influencer Pro — 1,800 BDT / month</option>
               </select>
             </label>
+            <label class="wide"><input name="isPrivate" type="checkbox" /> Private, invite-only meet</label>
           </div>
-          <button class="btn btn-primary" type="submit">Pay host fee &amp; publish</button>
+          <button class="btn btn-primary" type="submit">Publish meet</button>
           <p class="host-form-status" id="host-form-status" role="status"></p>
         </form>
       </section>
@@ -1728,12 +1729,11 @@
               <p>Online meets still sit in the same feed so a host in Rangpur can run a national room.</p>
             </article>
             <article class="card">
-              <h3>Crowdwork, co-paid</h3>
+              <h3>Why hosts stay</h3>
               <p>
-                Hosts pay a listing fee. OpenAI pays a matching crowdwork kit — snacks, prints,
-                connectivity — so the meet is not a hobby tax on the organiser.
+                Host fees cover the practical community kit: cha, posters, and wifi.
               </p>
-              <p>In return, the room is an OpenAI community surface, not a generic tech mixer.</p>
+              <p>That keeps each room welcoming, useful, and ready for neighbours to build together.</p>
             </article>
             <article class="card">
               <h3>Ratings that rank</h3>
@@ -1760,7 +1760,7 @@
           <div>
             <p class="kicker">New cities first</p>
             <h2>Join the <span class="quirk">host list</span></h2>
-            <p>Get a ping when OpenAI crowdwork budget opens in your division.</p>
+            <p>Get a ping when new hosting opportunities open in your division.</p>
           </div>
           <form class="waitlist-form" id="waitlist-form">
             <label class="sr-only" for="waitlist-email">Email address</label>
@@ -1900,6 +1900,9 @@
     </dialog>
 
     <script>
+      // Configure this public project endpoint during deployment; do not put secrets in browser code.
+      const SUPABASE_URL = "";
+      const SUPABASE_ANON_KEY = "sb_publishable_R3OKG61kDEnB4Pdg4V0TRA_RayR4zA8";
       const DIVISIONS = [
         "Dhaka",
         "Chattogram",
@@ -1969,107 +1972,7 @@
         },
       ];
 
-      const EVENTS = [
-        {
-          id: "dhanmondi-gpt-night",
-          title: "OPEN BOX Dhanmondi GPT Night",
-          date: "26 Sep 2026",
-          start: "2026-09-26T16:00:00+06:00",
-          end: "2026-09-26T19:00:00+06:00",
-          mode: "In-person",
-          location: "Dhaka",
-          division: "Dhaka",
-          address: "House 27, Road 6, Dhanmondi, Dhaka 1205",
-          hostId: "nusrat-rahman",
-          price: "Free",
-          claimed: 58,
-          capacity: 70,
-          description:
-            "A rooftop OpenAI meet for Dhaka builders. Prompting, GPT product demos, and a short ethics circle. Exact house pin unlocks 24 hours before doors.",
-          agenda: [
-            { time: "4:00 PM", item: "Door check-in & chai" },
-            { time: "4:20 PM", item: "Host intro: why this room exists" },
-            { time: "4:35 PM", item: "OpenAI tools lightning talks" },
-            { time: "5:30 PM", item: "Build with a neighbour" },
-            { time: "6:40 PM", item: "Rate the host & photos" },
-          ],
-          tiers: [{ id: "free", name: "Free community ticket", note: "In-person, 70 seats, Dhanmondi rooftop" }],
-        },
-        {
-          id: "banani-builders-lab",
-          title: "OpenAI Builders Lab — Banani",
-          date: "10 Oct 2026",
-          start: "2026-10-10T10:00:00+06:00",
-          end: "2026-10-10T16:00:00+06:00",
-          mode: "Hybrid",
-          location: "Dhaka",
-          division: "Dhaka",
-          address: "Level 5, Plot 11, Road 11, Banani, Dhaka 1213",
-          hostId: "farhan-chowdhury",
-          price: "Paid from 599 BDT",
-          claimed: 12,
-          capacity: 40,
-          description:
-            "A full-day OpenAI builders lab. Host fee plus OpenAI crowdwork co-pay covers connectivity and lunch. Hybrid seats join from anywhere in Bangladesh.",
-          agenda: [
-            { time: "10:00 AM", item: "Check-in & kit" },
-            { time: "10:30 AM", item: "Ship a GPT workflow" },
-            { time: "1:00 PM", item: "Lunch (crowdwork kit)" },
-            { time: "3:30 PM", item: "Demo circle & host ratings" },
-          ],
-          tiers: [
-            { id: "seat", name: "Lab seat 599 BDT", note: "In the Banani room" },
-            { id: "hybrid", name: "Hybrid seat 199 BDT", note: "Live from any BD city" },
-          ],
-        },
-        {
-          id: "openai-office-hours",
-          title: "OPEN BOX Office Hours",
-          date: "22 Oct 2026",
-          start: "2026-10-22T20:00:00+06:00",
-          end: "2026-10-22T21:30:00+06:00",
-          mode: "Online",
-          location: "Online",
-          division: "Dhaka",
-          address: "Online — link unlocks T-24h on your ticket",
-          hostId: "openai-bd",
-          price: "Free",
-          claimed: 143,
-          capacity: 500,
-          description:
-            "Weekly OpenAI office hours for Bangladesh. Bring a stuck prompt, a product question, or a hosting plan for your own local address.",
-          agenda: [
-            { time: "8:00 PM", item: "Open questions" },
-            { time: "8:35 PM", item: "Host playbook for local meets" },
-            { time: "9:10 PM", item: "Division shout-outs" },
-          ],
-          tiers: [{ id: "free", name: "Free community ticket", note: "Link on your pass at T-24h" }],
-        },
-        {
-          id: "ctg-port-city",
-          title: "OPEN BOX Chattogram #1",
-          date: "14 Nov 2026",
-          start: "2026-11-14T15:00:00+06:00",
-          end: "2026-11-14T18:00:00+06:00",
-          mode: "In-person",
-          location: "Chattogram",
-          division: "Chattogram",
-          address: "2nd floor, Cafe Lighthouse, GEC Circle, Chattogram 4000",
-          hostId: "lamiya-hoque",
-          price: "Free",
-          claimed: 0,
-          capacity: 60,
-          description:
-            "First OPEN BOX in Chattogram. Students and harbour-city builders, hosted at a GEC cafe. OpenAI co-pays the crowdwork kit.",
-          agenda: [
-            { time: "3:00 PM", item: "Doors & check-in" },
-            { time: "3:25 PM", item: "Your first OpenAI project" },
-            { time: "4:20 PM", item: "Pair build" },
-            { time: "5:30 PM", item: "Demos, ratings, photos" },
-          ],
-          tiers: [{ id: "free", name: "Free community ticket", note: "Students welcome" }],
-        },
-      ];
+      let EVENTS = [];
 
       (function () {
         const menuToggle = document.querySelector(".menu-toggle");
@@ -2121,6 +2024,12 @@
         let registerStep = 1;
         let tickets = [];
         let clockOffsetMs = 0;
+        const inviteCode = new URLSearchParams(window.location.search).get("invite");
+        function supabaseHeaders(extra) { return Object.assign({ apikey: SUPABASE_ANON_KEY, Authorization: "Bearer " + SUPABASE_ANON_KEY }, extra || {}); }
+        function makeInviteCode() { const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; return Array.from({ length: 6 }, function () { return alphabet[Math.floor(Math.random() * alphabet.length)]; }).join(""); }
+        function ensureHost(row) { const id = row.host_id || (row.host_name || "OPEN BOX Host").toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-" + row.id; if (!hostById(id)) HOSTS.push({ id: id, name: row.host_name || "OPEN BOX Host", city: row.city || "Bangladesh", division: row.division || "Dhaka", rating: 5, reviews: 0, eventsHosted: 1, badge: "", initials: "" }); return id; }
+        function meetFromRow(row) { const start = row.starts_at; return { id: String(row.id), title: row.title, date: new Date(start).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }), start: start, end: row.ends_at || new Date(new Date(start).getTime() + 10800000).toISOString(), mode: row.mode || "In-person", location: row.city || "Bangladesh", division: row.division || "Dhaka", address: row.address || "Address shared with guests", hostId: ensureHost(row), price: row.price || "Free", claimed: Number(row.claimed) || 0, capacity: Number(row.capacity) || 30, description: row.description || "A new OPEN BOX meet.", agenda: row.agenda || [{ time: "Start", item: "Doors and check-in" }], tiers: row.tiers || [{ id: "free", name: "Free community ticket", note: "Local address unlocks T-24h" }], isPrivate: Boolean(row.is_private), inviteCode: row.invite_code || "" }; }
+        async function loadMeets() { try { const response = await fetch(SUPABASE_URL + "/rest/v1/meets?select=*&order=starts_at.asc", { headers: supabaseHeaders() }); if (!response.ok) throw new Error(); EVENTS = (await response.json()).map(meetFromRow); } catch (error) { eventClickStatus.textContent = "Unable to load meets right now. Please try again shortly."; EVENTS = []; } refreshBadges(); renderRankings(); renderEvents(); }
 
         function now() {
           return new Date(Date.now() + clockOffsetMs);
@@ -2618,6 +2527,7 @@
           const titleRow = document.createElement("div");
           titleRow.className = "event-title-row";
           titleRow.append(makeTextElement("h3", "", event.title), makeTextElement("span", "mode-chip", event.mode));
+          if (event.isPrivate) titleRow.append(makeTextElement("span", "mode-chip", "Private meet - you’re invited"));
 
           const location = document.createElement("p");
           location.className = "event-meta";
@@ -2690,6 +2600,7 @@
         function renderEvents() {
           const query = eventSearch.value.trim().toLowerCase();
           const visible = EVENTS.filter(function (event) {
+            if (event.isPrivate && event.inviteCode !== inviteCode) return false;
             const host = hostById(event.hostId);
             const searchable = [
               event.title,
@@ -2881,72 +2792,11 @@
           waitlistForm.reset();
         });
 
-        hostForm.addEventListener("submit", function (submitEvent) {
-          submitEvent.preventDefault();
-          const data = new FormData(hostForm);
-          const hostName = String(data.get("hostName")).trim();
-          const division = String(data.get("division"));
-          const city = String(data.get("city")).trim();
-          const address = String(data.get("address")).trim();
-          const title = String(data.get("title")).trim();
-          const startValue = String(data.get("start"));
-          const capacity = Number(data.get("capacity"));
-          const plan = String(data.get("plan"));
-          const hostId = hostName.toLowerCase().replace(/\s+/g, "-") + "-" + Date.now();
-          HOSTS.push({
-            id: hostId,
-            name: hostName,
-            city: city,
-            division: division,
-            rating: 5,
-            reviews: 0,
-            eventsHosted: 1,
-            badge: "",
-            initials: hostName.split(" ").map(function (w) { return w[0]; }).join("").slice(0, 2).toUpperCase(),
-          });
-          const start = new Date(startValue);
-          const end = new Date(start.getTime() + 3 * 60 * 60 * 1000);
-          EVENTS.unshift({
-            id: "host-" + Date.now(),
-            title: title,
-            date: start.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }),
-            start: start.toISOString(),
-            end: end.toISOString(),
-            mode: "In-person",
-            location: city,
-            division: division,
-            address: address + ", " + city,
-            hostId: hostId,
-            price: "Free",
-            claimed: 0,
-            capacity: capacity,
-            description: "A new OPEN BOX meet at a local address in " + division + " Division. Host plan: " + plan + ".",
-            agenda: [
-              { time: "Start", item: "Doors and check-in" },
-              { time: "+20m", item: "OpenAI working session" },
-              { time: "+2h", item: "Demos" },
-              { time: "Close", item: "Host ratings" },
-            ],
-            tiers: [{ id: "free", name: "Free community ticket", note: "Local address unlocks T-24h" }],
-          });
-          const copy = {
-            community: "800 BDT host fee reserved. OpenAI co-pay 1,200 BDT attached.",
-            featured: "2,500 BDT host fee reserved. OpenAI co-pay 4,000 BDT attached.",
-            pro: "1,800 BDT / month Pro reserved. OpenAI co-pay on every meet.",
-          };
-          hostFormStatus.textContent = "Listed. " + copy[plan] + " Your meet is now in the feed.";
-          hostForm.reset();
-          refreshBadges();
-          renderEvents();
-          renderRankings();
-          document.getElementById("events").scrollIntoView({ behavior: "smooth" });
-        });
+        hostForm.addEventListener("submit", async function (submitEvent) { submitEvent.preventDefault(); const data = new FormData(hostForm); const isPrivate = data.get("isPrivate") === "on"; const row = { title: String(data.get("title")).trim(), host_name: String(data.get("hostName")).trim(), division: String(data.get("division")), city: String(data.get("city")).trim(), address: String(data.get("address")).trim(), starts_at: new Date(String(data.get("start"))).toISOString(), capacity: Number(data.get("capacity")), plan: String(data.get("plan")), mode: "In-person", price: "Free", claimed: 0, is_private: isPrivate, invite_code: isPrivate ? makeInviteCode() : null }; hostFormStatus.textContent = "Publishing your meet…"; try { const response = await fetch(SUPABASE_URL + "/rest/v1/meets", { method: "POST", headers: supabaseHeaders({ "Content-Type": "application/json", Prefer: "return=representation" }), body: JSON.stringify(row) }); if (!response.ok) throw new Error(); const created = await response.json(); hostForm.reset(); await loadMeets(); const meet = Array.isArray(created) ? created[0] : created; hostFormStatus.textContent = "Your box is open!" + (isPrivate ? " Share this invite link: " + location.origin + location.pathname + "?invite=" + meet.invite_code : ""); } catch (error) { hostFormStatus.textContent = "We couldn't publish your meet. Please try again."; } });
 
-        refreshBadges();
         renderRankFilters();
-        renderRankings();
-        renderEvents();
         renderTickets();
+        loadMeets();
         observeReveals(document);
         setInterval(function () {
           if (tickets.length) renderTickets();
