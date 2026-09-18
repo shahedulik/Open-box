@@ -6,7 +6,7 @@
     <title>OPEN BOX - host OpenAI meetups anywhere in Bangladesh</title>
     <meta
       name="description"
-      content="Luma-style platform for OpenAI community meets at local addresses all over Bangladesh. Hosts earn influencer ranking. OpenAI co-pays for crowdwork."
+      content="OPEN BOX is Bangladesh's home for OpenAI meets at local addresses. Hosts earn influencer rankings and receive crowdwork kits."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1516,10 +1516,12 @@
         <p class="badge">OpenAI community meets · Bangladesh only</p>
         <h1 id="hero-title">OPEN <span class="quirk">BOX</span></h1>
         <p class="subtitle">
-          A Luma-style platform where anyone in Bangladesh hosts an OpenAI meet at a real local
-          address — rooftop, cafe, campus lab, living room. Hosts get rated, ranked in their
-          division, and recognised as OpenAI community influencers. OpenAI and the host both pay to
-          run the crowdwork.
+          Bangladesh's own home for OpenAI meets. Anyone can open a box - a rooftop in Dhanmondi, a
+          cafe in GEC, a campus lab at CUET, a living room in Rangpur - and host the community there.
+          Guests RSVP, get the address on their ticket, check in with a QR, and rate the host after.
+          The best-rated hosts top their division's leaderboard and earn the OpenAI Community
+          Influencer badge. Hosts pay a small listing fee and the OpenAI community fund pays it back
+          as a crowdwork kit: cha, posters, wifi.
         </p>
         <div class="event-search" role="search">
           <label class="sr-only" for="event-search">Search events or cities</label>
@@ -1553,7 +1555,7 @@
       </section>
 
       <section id="ticket-desk" class="section">
-        <p class="kicker">Your Luma-style pass</p>
+        <p class="kicker">Your OPEN BOX pass</p>
         <h2>Registration to the <span class="quirk">minute</span> before doors</h2>
         <p class="section-lead">
           After you RSVP, OPEN BOX holds a live ticket: countdown, address unlock, check-in QR, and
@@ -1571,8 +1573,8 @@
         <p class="kicker">Exact guest process</p>
         <h2>From RSVP to <span class="quirk">doors open</span></h2>
         <p class="section-lead">
-          The same beats Luma uses, written for Bangladesh local-address meets. Times lock to each
-          event’s start clock (Asia/Dhaka).
+          The same rhythm the world's best event platforms use, rewritten for Bangladesh local
+          addresses. Times lock to each event’s start clock (Asia/Dhaka).
         </p>
         <ol class="journey-grid">
           <li class="card">
@@ -1632,7 +1634,7 @@
             <p class="plan-price">800 BDT <span>host fee</span></p>
             <ul class="plan-features">
               <li>Public meet page at your local address</li>
-              <li>Luma-style RSVP, calendar, check-in QR</li>
+              <li>RSVP, calendar hold, and check-in QR</li>
               <li>OpenAI co-pay: 1,200 BDT crowdwork kit</li>
             </ul>
             <a class="btn btn-ghost" href="#host-form">List my meet</a>
@@ -1884,6 +1886,9 @@
             </label>
             <label class="wide">How did you hear about this meet?
               <input name="referral" placeholder="Host, Facebook, campus club…" />
+            </label>
+            <label class="wide">Optional: paste your own OpenAI key to run a live call (stays in your browser only). Leave empty for the saved sample.
+              <input name="openaiKey" type="password" autocomplete="off" />
             </label>
           </div>
           <div class="detail-actions">
@@ -2247,9 +2252,29 @@
           return element;
         }
 
+        function normalizedRating(rating) {
+          const value = Number(rating);
+          return Number.isFinite(value) ? Math.min(5, Math.max(0, value)) : 0;
+        }
+
+        function formatRating(rating) {
+          return normalizedRating(rating).toFixed(1);
+        }
+
         function starLabel(rating) {
-          const full = Math.round(rating);
-          return "★".repeat(full) + "☆".repeat(5 - full) + " " + rating.toFixed(1);
+          const normalized = normalizedRating(rating);
+          const full = Math.round(normalized);
+          return "★".repeat(full) + "☆".repeat(5 - full) + " " + formatRating(normalized);
+        }
+
+        function claimedSeats(event) {
+          const capacity = Math.max(0, Number(event.capacity) || 0);
+          const claimed = Math.max(0, Number(event.claimed) || 0);
+          return Math.min(capacity, Math.floor(claimed));
+        }
+
+        function seatClaimLabel(event) {
+          return claimedSeats(event) + " of " + Math.max(0, Number(event.capacity) || 0) + " seats claimed";
         }
 
         function calendarStamp(value) {
@@ -2384,10 +2409,10 @@
 
           renderTiers(detail.tiers, event, "detail-tier");
           detail.seats.replaceChildren(
-            makeTextElement("span", "", event.claimed + " of " + event.capacity + " seats claimed"),
+            makeTextElement("span", "", seatClaimLabel(event)),
             makeTextElement("strong", "", event.price)
           );
-          detail.progress.style.width = Math.round((event.claimed / event.capacity) * 100) + "%";
+          detail.progress.style.width = Math.round((claimedSeats(event) / event.capacity) * 100) + "%";
           detail.gcal.href = googleCalendarUrl(event);
           detail.sharePanel.classList.add("hidden");
           detail.share.textContent = "Share";
@@ -2610,14 +2635,14 @@
           const progressMeta = document.createElement("div");
           progressMeta.className = "progress-meta";
           const seatText = document.createElement("span");
-          const seatCount = makeTextElement("span", "", String(event.claimed));
-          seatCount.dataset.count = String(event.claimed);
+          const seatCount = makeTextElement("span", "", String(claimedSeats(event)));
+          seatCount.dataset.count = String(claimedSeats(event));
           seatText.append(seatCount, document.createTextNode(" of " + event.capacity + " seats claimed"));
           progressMeta.append(seatText, makeTextElement("strong", "", event.price));
           const progress = document.createElement("div");
           progress.className = "progress-track";
           const fill = document.createElement("span");
-          fill.style.width = Math.round((event.claimed / event.capacity) * 100) + "%";
+          fill.style.width = Math.round((claimedSeats(event) / event.capacity) * 100) + "%";
           progress.append(fill);
 
           const actions = document.createElement("div");
@@ -2696,8 +2721,8 @@
             const rank = makeTextElement("span", "num", String(index + 1).padStart(2, "0"));
             const body = document.createElement("div");
             const ratingLine = document.createElement("p");
-            const ratingValue = makeTextElement("span", "", host.rating.toFixed(1));
-            ratingValue.dataset.count = host.rating.toFixed(2);
+            const ratingValue = makeTextElement("span", "", formatRating(host.rating));
+            ratingValue.dataset.count = formatRating(host.rating);
             ratingValue.dataset.decimals = "1";
             ratingLine.append(
               document.createTextNode("★ "),
