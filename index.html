@@ -1291,6 +1291,51 @@
         font-weight: 500;
       }
 
+      .system-status {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.28rem 0.65rem;
+        border: 2px solid var(--ink);
+        border-radius: 999px;
+        box-shadow: 2px 2px 0 var(--ink);
+        color: var(--ink);
+        font-size: 0.76rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .status-online { background: #BEE8C5; }
+      .status-cached { background: #F7E58C; }
+
+      .form-grid input.invalid-field {
+        border-color: #D94A4A;
+        background: #FFE1E1;
+        box-shadow: 0 0 0 2px #D94A4A;
+      }
+
+      .sync-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        margin-left: 0.4rem;
+        color: var(--ink-soft);
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+
+      .sync-spinner {
+        width: 0.8rem;
+        height: 0.8rem;
+        border: 2px solid var(--violet);
+        border-top-color: var(--ink);
+        border-radius: 50%;
+        animation: sync-spin 700ms linear infinite;
+      }
+
+      .saved-locally { color: #9A6500; }
+
+      @keyframes sync-spin { to { transform: rotate(360deg); } }
+
       .register-flow {
         min-width: min(92vw, 36rem);
       }
@@ -1502,6 +1547,7 @@
           Menu
         </button>
         <div class="nav-links" id="nav-links">
+          <span class="system-status status-online" id="system-status" role="status">System Online</span>
           <a href="#events">Events</a>
           <a href="#host">Host a Meet</a>
           <a href="#rankings">Rankings</a>
@@ -1627,9 +1673,9 @@
           attendees rate you, and the community gets a welcoming place to build together.
         </p>
         <div class="grid four host-plans">
-          <article class="card plan-card"><p class="eyebrow">Free</p><p class="plan-price">0 BDT <span>host fee</span></p><ul class="plan-features"><li>Public meet page</li><li>RSVP and check-in QR</li><li>Community feed listing</li><li>One free meet per host</li></ul><a class="btn btn-ghost" href="#host-form">Open my box</a></article>
+          <article class="card plan-card"><p class="eyebrow">Free - 0 BDT</p><p class="plan-price">0 BDT <span>host fee</span></p><ul class="plan-features"><li>Public meet page</li><li>RSVP and check-in QR</li><li>Community feed listing</li><li>One free meet per host</li></ul><a class="btn btn-ghost" href="#host-form">Open my box</a></article>
           <article class="card plan-card">
-            <p class="eyebrow">Community listing</p>
+            <p class="eyebrow">Community 800 BDT</p>
             <p class="plan-price">800 BDT <span>host fee</span></p>
             <ul class="plan-features">
               <li>Public meet page at your local address</li>
@@ -1640,7 +1686,7 @@
           </article>
           <article class="card plan-card popular">
             <span class="popular-badge">Most popular</span>
-            <p class="eyebrow">Featured</p>
+            <p class="eyebrow">Featured 2,500 BDT</p>
             <p class="plan-price">2,500 BDT <span>host fee</span></p>
             <ul class="plan-features">
               <li>Top of the Bangladesh feed</li>
@@ -1651,7 +1697,7 @@
             <a class="btn btn-primary" href="#host-form">Go featured</a>
           </article>
           <article class="card plan-card">
-            <p class="eyebrow">Influencer Pro</p>
+            <p class="eyebrow">Influencer Pro 1,800 BDT/month</p>
             <p class="plan-price">1,800 BDT <span>/ month</span></p>
             <ul class="plan-features">
               <li>Unlimited local-address meets</li>
@@ -1684,10 +1730,10 @@
             <label class="wide">Local address <input name="address" required placeholder="House, road, neighbourhood" /></label>
             <label class="wide">Meet title <input name="title" required placeholder="OPEN BOX — GPT meetup at my rooftop" /></label>
             <label>Date and time <input name="start" type="datetime-local" required /></label>
-            <label>Capacity <input name="capacity" type="number" min="5" max="200" value="30" required /></label>
+            <label>Capacity <input name="capacity" type="number" min="1" max="200" value="30" required /></label>
             <label>Host fee plan
               <select name="plan">
-                <option value="free">Free — 0 BDT</option>
+                <option value="free">Free - 0 BDT</option>
                 <option value="community">Community — 800 BDT</option>
                 <option value="featured">Featured — 2,500 BDT</option>
                 <option value="pro">Influencer Pro — 1,800 BDT / month</option>
@@ -1808,7 +1854,7 @@
         <span>OPEN <span class="logo-accent">BOX</span></span>
       </a>
       <p>Made by humans, for humans, in Bangladesh.</p>
-      <p>Local addresses. Co-paid crowdwork. Hosts ranked by the rooms they keep.</p>
+      <p>Local addresses. Community-powered gatherings. Hosts ranked by the rooms they keep.</p>
     </footer>
 
     <dialog class="event-dialog" id="event-dialog" aria-labelledby="event-dialog-title">
@@ -1900,9 +1946,8 @@
     </dialog>
 
     <script>
-      // Configure this public project endpoint during deployment; do not put secrets in browser code.
-      const SUPABASE_URL = "";
-      const SUPABASE_ANON_KEY = "sb_publishable_R3OKG61kDEnB4Pdg4V0TRA_RayR4zA8";
+      const SUPABASE_URL = "https://PASTE_YOUR_REF.supabase.co";
+      const SUPABASE_ANON_KEY = "sb_publishable_PASTE_REST_HERE";
       const DIVISIONS = [
         "Dhaka",
         "Chattogram",
@@ -2025,11 +2070,123 @@
         let tickets = [];
         let clockOffsetMs = 0;
         const inviteCode = new URLSearchParams(window.location.search).get("invite");
-        function supabaseHeaders(extra) { return Object.assign({ apikey: SUPABASE_ANON_KEY, Authorization: "Bearer " + SUPABASE_ANON_KEY }, extra || {}); }
-        function makeInviteCode() { const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; return Array.from({ length: 6 }, function () { return alphabet[Math.floor(Math.random() * alphabet.length)]; }).join(""); }
-        function ensureHost(row) { const id = row.host_id || (row.host_name || "OPEN BOX Host").toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-" + row.id; if (!hostById(id)) HOSTS.push({ id: id, name: row.host_name || "OPEN BOX Host", city: row.city || "Bangladesh", division: row.division || "Dhaka", rating: 5, reviews: 0, eventsHosted: 1, badge: "", initials: "" }); return id; }
-        function meetFromRow(row) { const start = row.starts_at; return { id: String(row.id), title: row.title, date: new Date(start).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }), start: start, end: row.ends_at || new Date(new Date(start).getTime() + 10800000).toISOString(), mode: row.mode || "In-person", location: row.city || "Bangladesh", division: row.division || "Dhaka", address: row.address || "Address shared with guests", hostId: ensureHost(row), price: row.price || "Free", claimed: Number(row.claimed) || 0, capacity: Number(row.capacity) || 30, description: row.description || "A new OPEN BOX meet.", agenda: row.agenda || [{ time: "Start", item: "Doors and check-in" }], tiers: row.tiers || [{ id: "free", name: "Free community ticket", note: "Local address unlocks T-24h" }], isPrivate: Boolean(row.is_private), inviteCode: row.invite_code || "" }; }
-        async function loadMeets() { try { const response = await fetch(SUPABASE_URL + "/rest/v1/meets?select=*&order=starts_at.asc", { headers: supabaseHeaders() }); if (!response.ok) throw new Error(); EVENTS = (await response.json()).map(meetFromRow); } catch (error) { eventClickStatus.textContent = "Unable to load meets right now. Please try again shortly."; EVENTS = []; } refreshBadges(); renderRankings(); renderEvents(); }
+        const FALLBACK_MEETS = [
+          {
+            id: "cached-dhaka-rooftop",
+            title: "Prompt Jam on a Dhanmondi rooftop",
+            host_name: "Nusrat Rahman",
+            division: "Dhaka",
+            city: "Dhaka",
+            address: "Dhanmondi, Dhaka",
+            starts_at: "2026-10-03T10:00:00+06:00",
+            capacity: 30,
+            claimed: 18,
+            mode: "In-person",
+            price: "Free",
+            description: "Bring a prompt, swap ideas, and meet the local OPEN BOX crew.",
+          },
+          {
+            id: "cached-gec-studio",
+            title: "Creative AI studio night",
+            host_name: "Lamiya Hoque",
+            division: "Chattogram",
+            city: "Chattogram",
+            address: "GEC Circle, Chattogram",
+            starts_at: "2026-10-10T17:00:00+06:00",
+            capacity: 24,
+            claimed: 11,
+            mode: "In-person",
+            price: "800 BDT",
+            description: "A practical evening for makers building with AI.",
+          },
+          {
+            id: "cached-online-room",
+            title: "Bangladesh builder open room",
+            host_name: "OPEN BOX Desk",
+            division: "Dhaka",
+            city: "Online",
+            address: "Online room",
+            starts_at: "2026-10-17T19:00:00+06:00",
+            capacity: 80,
+            claimed: 34,
+            mode: "Online",
+            price: "Free",
+            description: "A nationwide room for sharing what is working.",
+          },
+        ];
+
+        function supabaseHeaders(extra) {
+          return Object.assign(
+            { apikey: SUPABASE_ANON_KEY, Authorization: "Bearer " + SUPABASE_ANON_KEY },
+            extra || {}
+          );
+        }
+
+        function setSystemStatus(cached) {
+          const status = document.getElementById("system-status");
+          status.textContent = cached ? "Cached Demo Mode" : "System Online";
+          status.classList.toggle("status-cached", cached);
+          status.classList.toggle("status-online", !cached);
+        }
+
+        function makeInviteCode() {
+          const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+          return Array.from({ length: 6 }, function () {
+            return alphabet[Math.floor(Math.random() * alphabet.length)];
+          }).join("");
+        }
+
+        function ensureHost(row) {
+          const id = row.host_id || (row.host_name || "OPEN BOX Host").toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-" + row.id;
+          if (!hostById(id)) {
+            HOSTS.push({ id: id, name: row.host_name || "OPEN BOX Host", city: row.city || "Bangladesh", division: row.division || "Dhaka", rating: Number(row.host_rating) || 5, reviews: 0, eventsHosted: 1, badge: "", initials: "" });
+          }
+          return id;
+        }
+
+        function meetFromRow(row) {
+          const start = row.starts_at;
+          return {
+            id: String(row.id),
+            title: row.title,
+            date: new Date(start).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }),
+            start: start,
+            end: row.ends_at || new Date(new Date(start).getTime() + 10800000).toISOString(),
+            mode: row.mode || "In-person",
+            location: row.city || "Bangladesh",
+            division: row.division || "Dhaka",
+            address: row.address || "Address shared with guests",
+            hostId: ensureHost(row),
+            price: row.price_label || row.price || "Free",
+            claimed: Number(row.seats_claimed ?? row.claimed) || 0,
+            capacity: Number(row.capacity) || 30,
+            description: row.description || "A new OPEN BOX meet.",
+            agenda: row.agenda || [{ time: "Start", item: "Doors and check-in" }],
+            tiers: row.tiers || [{ id: "free", name: "Free community ticket", note: "Local address unlocks T-24h" }],
+            isPrivate: row.is_private === true || row.is_private === "true",
+            inviteCode: row.invite_code || "",
+            syncStatus: row.syncStatus || "",
+          };
+        }
+
+        async function loadMeets() {
+          try {
+            const response = await fetch(SUPABASE_URL + "/rest/v1/meets?select=*&order=starts_at.asc", {
+              headers: supabaseHeaders(),
+            });
+            if (!response.ok) throw new Error("Could not load meets");
+            const rows = await response.json();
+            if (!Array.isArray(rows)) throw new Error("Invalid meets response");
+            EVENTS = rows.map(meetFromRow);
+            setSystemStatus(false);
+          } catch (error) {
+            EVENTS = FALLBACK_MEETS.map(meetFromRow);
+            setSystemStatus(true);
+          }
+          refreshBadges();
+          renderRankings();
+          renderEvents();
+        }
 
         function now() {
           return new Date(Date.now() + clockOffsetMs);
@@ -2527,7 +2684,13 @@
           const titleRow = document.createElement("div");
           titleRow.className = "event-title-row";
           titleRow.append(makeTextElement("h3", "", event.title), makeTextElement("span", "mode-chip", event.mode));
-          if (event.isPrivate) titleRow.append(makeTextElement("span", "mode-chip", "Private meet - you’re invited"));
+          if (event.isPrivate) titleRow.append(makeTextElement("span", "mode-chip", "Private meet - you're invited"));
+          if (event.syncStatus === "syncing") {
+            const syncing = makeTextElement("span", "sync-indicator", "Syncing...");
+            syncing.prepend(makeTextElement("span", "sync-spinner", ""));
+            titleRow.append(syncing);
+          }
+          if (event.syncStatus === "saved-locally") titleRow.append(makeTextElement("span", "sync-indicator saved-locally", "Saved locally"));
 
           const location = document.createElement("p");
           location.className = "event-meta";
@@ -2590,8 +2753,8 @@
 
         function eventMatchesFilter(event) {
           if (activeFilter === "All") return true;
-          if (activeFilter === "Free") return event.price === "Free";
-          if (activeFilter === "Paid") return event.price !== "Free";
+          if (activeFilter === "Free") return event.price === "Free" || event.price.indexOf("Free") === 0;
+          if (activeFilter === "Paid") return !(event.price === "Free" || event.price.indexOf("Free") === 0);
           if (activeFilter === "In-person") return event.mode === "In-person" || event.mode === "Hybrid";
           if (activeFilter === "Online") return event.mode === "Online" || event.mode === "Hybrid";
           return true;
@@ -2792,7 +2955,84 @@
           waitlistForm.reset();
         });
 
-        hostForm.addEventListener("submit", async function (submitEvent) { submitEvent.preventDefault(); const data = new FormData(hostForm); const isPrivate = data.get("isPrivate") === "on"; const row = { title: String(data.get("title")).trim(), host_name: String(data.get("hostName")).trim(), division: String(data.get("division")), city: String(data.get("city")).trim(), address: String(data.get("address")).trim(), starts_at: new Date(String(data.get("start"))).toISOString(), capacity: Number(data.get("capacity")), plan: String(data.get("plan")), mode: "In-person", price: "Free", claimed: 0, is_private: isPrivate, invite_code: isPrivate ? makeInviteCode() : null }; hostFormStatus.textContent = "Publishing your meet…"; try { const response = await fetch(SUPABASE_URL + "/rest/v1/meets", { method: "POST", headers: supabaseHeaders({ "Content-Type": "application/json", Prefer: "return=representation" }), body: JSON.stringify(row) }); if (!response.ok) throw new Error(); const created = await response.json(); hostForm.reset(); await loadMeets(); const meet = Array.isArray(created) ? created[0] : created; hostFormStatus.textContent = "Your box is open!" + (isPrivate ? " Share this invite link: " + location.origin + location.pathname + "?invite=" + meet.invite_code : ""); } catch (error) { hostFormStatus.textContent = "We couldn't publish your meet. Please try again."; } });
+        function startsAtInDhaka(value) {
+          const withSeconds = value.length === 16 ? value + ":00" : value;
+          return withSeconds + "+06:00";
+        }
+
+        hostForm.addEventListener("submit", async function (submitEvent) {
+          submitEvent.preventDefault();
+          const titleField = hostForm.elements.title;
+          const capacityField = hostForm.elements.capacity;
+          const title = titleField.value.trim();
+          const capacity = Number(capacityField.value);
+          const titleIsValid = title.length > 2;
+          const capacityIsValid = capacity > 0;
+          titleField.classList.toggle("invalid-field", !titleIsValid);
+          capacityField.classList.toggle("invalid-field", !capacityIsValid);
+          if (!titleIsValid || !capacityIsValid) {
+            hostFormStatus.textContent = "Add a meet title and a capacity above zero.";
+            return;
+          }
+
+          const data = new FormData(hostForm);
+          const isPrivate = data.get("isPrivate") === "on";
+          const pricePlans = {
+            free: "Free - 0 BDT",
+            community: "Community 800 BDT",
+            featured: "Featured 2,500 BDT",
+            pro: "Influencer Pro 1,800 BDT/month",
+          };
+          const pricePlan = String(data.get("plan"));
+          // This is intentionally the complete `meets` table contract—do not add UI-only fields.
+          const row = {
+            title: title,
+            mode: "In-person",
+            division: String(data.get("division")),
+            city: String(data.get("city")).trim(),
+            address: String(data.get("address")).trim(),
+            host_name: String(data.get("hostName")).trim(),
+            host_rating: 5,
+            capacity: capacity,
+            seats_claimed: 0,
+            price_plan: pricePlan,
+            price_label: pricePlans[pricePlan],
+            is_private: isPrivate,
+            invite_code: isPrivate ? makeInviteCode() : null,
+            starts_at: startsAtInDhaka(String(data.get("start"))),
+          };
+          const optimistic = meetFromRow(Object.assign({}, row, { id: "local-" + Date.now(), syncStatus: "syncing" }));
+          EVENTS.push(optimistic);
+          renderEvents();
+          hostFormStatus.textContent = "Publishing your meet…";
+
+          try {
+            const response = await fetch(SUPABASE_URL + "/rest/v1/meets", {
+              method: "POST",
+              headers: supabaseHeaders({ "Content-Type": "application/json", Prefer: "return=representation" }),
+              body: JSON.stringify(row),
+            });
+            const responseBody = await response.text();
+            if (!response.ok) throw new Error("Supabase meet insert failed (HTTP " + response.status + "): " + responseBody);
+            const created = responseBody ? JSON.parse(responseBody) : null;
+            const savedRow = Array.isArray(created) ? created[0] : created;
+            if (!savedRow) throw new Error("Supabase meet insert returned no record.");
+            const index = EVENTS.indexOf(optimistic);
+            if (index !== -1) EVENTS[index] = meetFromRow(savedRow);
+            setSystemStatus(false);
+            hostForm.reset();
+            renderEvents();
+            hostFormStatus.textContent = isPrivate
+              ? "Share this invite link: " + location.origin + location.pathname + "?invite=" + (savedRow.invite_code || row.invite_code)
+              : "Your box is open!";
+          } catch (error) {
+            console.error("Supabase meet publish failed:", error.message || error, error);
+            optimistic.syncStatus = "saved-locally";
+            setSystemStatus(true);
+            renderEvents();
+            hostFormStatus.textContent = "Saved locally" + (isPrivate ? ". Share this invite link: " + location.origin + location.pathname + "?invite=" + row.invite_code : ".");
+          }
+        });
 
         renderRankFilters();
         renderTickets();
